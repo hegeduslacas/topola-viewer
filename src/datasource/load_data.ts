@@ -63,7 +63,36 @@ async function loadGedzip(
       }
     } else {
       // Save image for later.
-      images.set(fileName, URL.createObjectURL(new Blob([unzipped[fileName]])));
+      //images.set(fileName, URL.createObjectURL(new Blob([unzipped[fileName]])));
+	  /*images.set(
+		  fileName,
+		  URL.createObjectURL(
+			new Blob([
+			  unzipped[fileName] instanceof Uint8Array
+				? unzipped[fileName].buffer.slice(
+					unzipped[fileName].byteOffset,
+					unzipped[fileName].byteOffset + unzipped[fileName].byteLength
+				  )
+				: unzipped[fileName],
+			])
+		  )
+		);*/
+		const data = unzipped[fileName];
+
+		const arrayBuffer =
+		  data instanceof Uint8Array
+			? data.buffer.slice(
+				data.byteOffset,
+				data.byteOffset + data.byteLength
+			  ) as ArrayBuffer
+			: data;
+
+		images.set(
+		  fileName,
+		  URL.createObjectURL(new Blob([arrayBuffer]))
+		);
+
+
     }
   }
   if (!gedcom) {
